@@ -50,9 +50,10 @@ app.use('/api', ensureAuth);
 // *** API Routes ***
 app.get('/api/character', async (req, res) => {
 
+
     try {
         const query = req.query;
-
+console.log(query);
         // get the data from the third party API
         const characters = await charactersApi.get(query.search, query.page);
 
@@ -96,10 +97,10 @@ app.get('/api/me/favorites', async (req, res) => {
         const result = await client.query(`
             SELECT id, 
                    name, 
+                   user_id as "userId", 
                    image, 
                    species,
-                   origin, 
-                   user_id as "userId", 
+                   origin,
                    TRUE as "isFavorite"
             FROM   favorites
             WHERE user_id = $1;
@@ -123,9 +124,9 @@ app.post('/api/me/favorites', async (req, res) => {
         const character = req.body;
 
         const result = await client.query(`
-            INSERT INTO favorites (id, name, user_id, species, origin, image)
+            INSERT INTO favorites (id, name, user_id, image, species, origin)
             VALUES ($1, $2, $3, $4, $5, $6)
-            RETURNING character as id, name, image, species, origin, user_id as "userId";
+            RETURNING id as id, name, user_id as "userId", image, species, origin;
         `, [
             // this first value is a shortcoming of this API, no id
             stringHash(character.name),
@@ -133,7 +134,7 @@ app.post('/api/me/favorites', async (req, res) => {
             req.userId,
             character.image,
             character.species,
-            character.origin
+            character.origin.name
         ]);
 
         res.json(result.rows[0]);
