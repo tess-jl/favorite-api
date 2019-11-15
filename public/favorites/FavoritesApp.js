@@ -1,9 +1,9 @@
 import Component from '../Component.js';
 import Header from '../common/Header.js';
-import QuoteList from '../quotes/QuoteList.js';
-import { getFavorites } from '../services/quote-api.js';
+import CharacterList from '../characters/CharacterList.js';
+import { getFavorites } from '../services/characters-api.js';
 
-class FindQuotesApp extends Component {
+class FindCharactersApp extends Component {
 
     onRender(dom) {
         const header = new Header();
@@ -11,12 +11,12 @@ class FindQuotesApp extends Component {
 
         const listSection = dom.querySelector('.list-section');
 
-        const quoteList = new QuoteList({ quotes: [], removeUnFavorites: true });
-        listSection.appendChild(quoteList.renderDOM());
+        const characterList = new CharacterList({ characters: [], removeUnFavorites: true });
+        listSection.appendChild(characterList.renderDOM());
 
         getFavorites()
-            .then(quotes => {
-                quoteList.update({ quotes: quotes });
+            .then(characters => {
+                characterList.update({ characters: characters });
             });
     }
 
@@ -28,7 +28,7 @@ class FindQuotesApp extends Component {
                 <main> 
                     <section class="list-section">
                         <!-- paging goes here -->
-                        <!-- quote list goes here -->        
+                        <!-- character list goes here -->        
                     </section>
                 </main>
             </div>
@@ -36,4 +36,4 @@ class FindQuotesApp extends Component {
     }
 }
 
-export default FindQuotesApp;
+export default FindCharactersApp;

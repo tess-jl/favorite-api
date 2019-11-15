@@ -8,7 +8,7 @@ const morgan = require('morgan');
 // Database Client
 const client = require('./lib/client');
 // Services
-const quotesApi = require('./lib/quotes-api');
+const charactersApi = require('./lib/characters-api');
 
 // Auth
 const ensureAuth = require('./lib/auth/ensure-auth');
@@ -48,19 +48,19 @@ app.use('/api/auth', authRoutes);
 app.use('/api', ensureAuth);
 
 // *** API Routes ***
-app.get('/api/quotes', async (req, res) => {
+app.get('/api/character', async (req, res) => {
 
     try {
         const query = req.query;
 
         // get the data from the third party API
-        const quotes = await quotesApi.get(query.search, query.page);
+        const characters = await charactersApi.get(query.search, query.page);
 
         // This part is coded after initial functionality is complete...
 
         // Check if any of these are favorites:
         // Make an array of ids
-        const ids = quotes.map(quote => quote.id);
+        const ids = characters.map(character => character.id);
         // Select these ids from the favorites table, for _this user_
         const result = await client.query(`
             SELECT id
@@ -71,16 +71,16 @@ app.get('/api/quotes', async (req, res) => {
 
         // make a lookup of all favorite ids:
 
-        const lookup = result.rows.reduce((acc, quote) => {
-            acc[quote.id] = true;
+        const lookup = result.rows.reduce((acc, character) => {
+            acc[character.id] = true;
             return acc;
         }, {});
 
         // adjust the favorite property of each item:
-        quotes.forEach(quote => quote.isFavorite = lookup[quote.id] || false);
+        characters.forEach(character => character.isFavorite = lookup[character.id] || false);
 
         // Ship it!
-        res.json(quotes);
+        res.json(characters);
     }
     catch (err) {
         console.log(err);
@@ -95,9 +95,10 @@ app.get('/api/me/favorites', async (req, res) => {
     try {
         const result = await client.query(`
             SELECT id, 
-                   character, 
+                   name, 
                    image, 
-                   quote, 
+                   species,
+                   origin, 
                    user_id as "userId", 
                    TRUE as "isFavorite"
             FROM   favorites
@@ -119,19 +120,20 @@ const stringHash = require('string-hash');
 app.post('/api/me/favorites', async (req, res) => {
     // Add a favorite _for the calling user_
     try {
-        const quote = req.body;
+        const character = req.body;
 
         const result = await client.query(`
-            INSERT INTO favorites (id, quote, user_id, character, image)
-            VALUES ($1, $2, $3, $4, $5)
-            RETURNING quote as id, character, image, quote, user_id as "userId";
+            INSERT INTO favorites (id, name, user_id, species, origin, image)
+            VALUES ($1, $2, $3, $4, $5, $6)
+            RETURNING character as id, name, image, species, origin, user_id as "userId";
         `, [
             // this first value is a shortcoming of this API, no id
-            stringHash(quote.quote),
-            quote.quote,
+            stringHash(character.name),
+            character.name,
             req.userId,
-            quote.character,
-            quote.image
+            character.image,
+            character.species,
+            character.origin
         ]);
 
         res.json(result.rows[0]);

@@ -1,19 +1,19 @@
 import Component from '../Component.js';
-import { makeFavorite, unFavorite } from '../../services/quote-api.js';
+import { makeFavorite, unFavorite } from '../services/characters-api.js';
 
-class QuoteItem extends Component {
+class CharacterItem extends Component {
 
     onRender(li) {
-        const quote = this.props.quote;
+        const character = this.props.character;
         const removeUnFavorites = this.props.removeUnFavorites;
         const favoriteButton = li.querySelector('.favorite-star');
         favoriteButton.addEventListener('click', () => {
-            quote.isFavorite = !quote.isFavorite;
-            if (quote.isFavorite) {
-                makeFavorite(quote);
+            character.isFavorite = !character.isFavorite;
+            if (character.isFavorite) {
+                makeFavorite(character);
             }
             else {
-                unFavorite(quote.id);
+                unFavorite(character.id);
                 setTimeout(() => {
                     if (removeUnFavorites) {
                         li.classList.add('fade');
@@ -26,24 +26,24 @@ class QuoteItem extends Component {
     }
 
     renderHTML() {
-        const quote = this.props.quote;
-        const starClass = quote.isFavorite ? 'is-favorite' : '';
+        const character = this.props.character;
+        const starClass = character.isFavorite ? 'is-favorite' : '';
 
         return /*html*/`
-            <li class="quote-item">
+            <li class="character-item">
                 <h2>
-                    <img src="${quote.image}">
-                    <span class="character-name">${quote.character}</span>
+                    <img src="${character.image}">
+                    <span class="character-name">${character.name}</span>
                     <button class="favorite-star ${starClass}">★</button>
                 </h2>
                 
-                <quote>
-                    ${quote.quote}
-                </quote>
+                <character>
+                    ${character.character}
+                </character>
 
             </li>
         `;
     }
 }
 
-export default QuoteItem;
+export default CharacterItem;

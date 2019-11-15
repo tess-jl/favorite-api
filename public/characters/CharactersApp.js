@@ -1,11 +1,11 @@
 import Component from '../Component.js';
 import Header from '../common/Header.js';
-import QuoteList from './QuoteList.js';
+import CharacterList from './CharacterList.js';
 import Search from './Search.js';
 import Paging from './Paging.js';
-import { getQuotes } from '../services/quote-api.js';
+import { getCharacters } from '../services/characters-api.js';
 
-class QuotesApp extends Component {
+class CharactersApp extends Component {
 
     onRender(dom) {
         const header = new Header();
@@ -20,14 +20,14 @@ class QuotesApp extends Component {
         const listSection = dom.querySelector('.list-section');
 
 
-        const quoteList = new QuoteList({ quotes: [] });
-        listSection.appendChild(quoteList.renderDOM());
+        const characterList = new CharacterList({ characters: [] });
+        listSection.appendChild(characterList.renderDOM());
 
-        const loadQuotes = async () => {
+        const loadCharacters = async () => {
             try {
-                const quotes = await getQuotes();
+                const characters = await getCharacters();
 
-                quoteList.update({ quotes: quotes });
+                characterList.update({ characters: characters });
 
                 paging.update({
                     // This API does not give total results :(
@@ -37,11 +37,11 @@ class QuotesApp extends Component {
             catch (err) {
                 console.log(err);
             }
-        }
+        };
 
-        loadQuotes();
+        loadCharacters();
         window.addEventListener('hashchange', () => {
-            loadQuotes();
+            loadCharacters();
         });
     }
 
@@ -56,7 +56,7 @@ class QuotesApp extends Component {
                         
                     <section class="list-section">
                         <!-- paging goes here -->
-                        <!-- quote list goes here -->        
+                        <!-- character list goes here -->        
                     </section>
                 </main>
             </div>
@@ -64,4 +64,4 @@ class QuotesApp extends Component {
     }
 }
 
-export default QuotesApp;
+export default CharactersApp;
