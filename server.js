@@ -53,7 +53,7 @@ app.get('/api/character', async (req, res) => {
 
     try {
         const query = req.query;
-console.log(query);
+
         // get the data from the third party API
         const characters = await charactersApi.get(query.search, query.page);
 
