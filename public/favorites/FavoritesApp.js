@@ -1,7 +1,7 @@
 import Component from '../Component.js';
 import Header from '../common/Header.js';
 import CharacterList from '../characters/CharacterList.js';
-import { getFavorites } from '../services/characters-api.js';
+import { getFavorites } from '../services/character-api.js';
 
 class FindCharactersApp extends Component {
 

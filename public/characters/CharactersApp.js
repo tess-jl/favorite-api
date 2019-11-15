@@ -3,7 +3,7 @@ import Header from '../common/Header.js';
 import CharacterList from './CharacterList.js';
 import Search from './Search.js';
 import Paging from './Paging.js';
-import { getCharacters } from '../services/characters-api.js';
+import { getCharacters } from '../services/character-api.js';
 
 class CharactersApp extends Component {
 

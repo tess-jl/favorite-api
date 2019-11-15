@@ -34,7 +34,7 @@ async function fetchWithError(url, options) {
 
 export function getCharacters() {
     const hashQuery = window.location.hash.slice(1);
-    const url = `${BASE_URL}/characters?${hashQuery}`;
+    const url = `${BASE_URL}/character?${hashQuery}`;
     return fetchWithError(url);
 }
 

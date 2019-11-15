@@ -1,4 +1,4 @@
-import QuotesApp from './QuotesApp.js';
+import CharactersApp from './CharactersApp.js';
 
-const app = new QuotesApp();
+const app = new CharactersApp();
 document.body.prepend(app.renderDOM());

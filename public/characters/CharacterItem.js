@@ -1,5 +1,5 @@
 import Component from '../Component.js';
-import { makeFavorite, unFavorite } from '../services/characters-api.js';
+import { makeFavorite, unFavorite } from '../services/character-api.js';
 
 class CharacterItem extends Component {
 
@@ -37,9 +37,10 @@ class CharacterItem extends Component {
                     <button class="favorite-star ${starClass}">★</button>
                 </h2>
                 
-                <character>
-                    ${character.character}
-                </character>
+                <p>
+                    ORIGIN: ${character.origin.name}<br>
+                    SPECIES: ${character.species}
+                </p>
 
             </li>
         `;
